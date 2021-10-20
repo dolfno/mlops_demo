@@ -1,15 +1,18 @@
 [tool.poetry]
-name = "python_ci_template"
+name = "python-ci-template"
 version = "0.1.0"
 description = "template to create python package including generic CI tools"
 authors = ["dolfno <dnoordman@schubergphilis.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "3.10"
-awswrangler = "^2.12.1"
+python = "^3.9"
+click = "^8.0.3"
 
 [tool.poetry.dev-dependencies]
+
+[tool.poetry.scripts]
+my-script = "python_ci_template.console:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
