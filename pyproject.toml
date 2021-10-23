@@ -13,6 +13,8 @@ awswrangler = "^2.12.1"
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
 pytest-cov = "^3.0.0"
+nox = "^2021.10.1"
+pytest-mock = "^3.6.1"
 
 [tool.poetry.scripts]
 my-script = "python_ci_template.console:main"
@@ -22,7 +24,7 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.coverage.paths]
-source = ["src"]
+source = ["src", "*/site-packages"]
 
 [tool.coverage.run]
 branch = true

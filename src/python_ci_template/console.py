@@ -4,6 +4,12 @@ import boto3
 from . import __version__
 
 
+def get_tags(glue_connection):
+    con = wr.mysql.connect(glue_connection)
+    con.select_db("cb_data")
+    return wr.mysql.read_sql_query("select uuid, name from tags limit 1", con)
+
+
 @click.command()
 @click.option(
     "--glue_connection",
@@ -28,10 +34,5 @@ def main(glue_connection: str, aws_region: str) -> None:
 
     click.echo(click.style('Hello there', bg='blue', fg='white'))
     click.echo('glue con is now {}'.format(glue_connection))
-    gc = str(glue_connection)
-    con = wr.mysql.connect(gc)
-    con.select_db("cb_data")
-    click.echo("made conn")
-    tags = wr.mysql.read_sql_query(
-        "select uuid, name from tags limit 1", con)
+    tags = get_tags(glue_connection)
     click.echo("found some tags {}".format(tags.to_string()))
