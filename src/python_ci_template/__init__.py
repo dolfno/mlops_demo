@@ -1,2 +1,2 @@
-# src/some_packagepoe/__init__.py
+"""The tag command line tool to demo CI in python"""
 __version__ = "0.1.0"

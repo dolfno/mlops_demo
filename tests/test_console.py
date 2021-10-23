@@ -1,4 +1,3 @@
-# tests/test_console.py
 import click.testing
 import pytest
 
@@ -8,7 +7,11 @@ from python_ci_template import console
 
 
 # Init cache
-FakeDataLoader("./fixtures/cassette.pkl", console.get_tags, **{"glue_connection": "nldevun_a17a_ro"}).data
+FakeDataLoader(
+    "./fixtures/cassette.pkl",
+    console.get_tags,
+    **{"glue_connection": "nldevun_a17a_ro"}
+).data
 
 
 @pytest.fixture
@@ -19,7 +22,11 @@ def runner():
 @pytest.fixture
 def mock_get_tags(mocker):
     mock = mocker.patch("python_ci_template.console.get_tags")
-    f = FakeDataLoader("./fixtures/cassette.pkl", console.get_tags, **{"glue_connection": "nldevun_a17a_ro"})
+    f = FakeDataLoader(
+        "./fixtures/cassette.pkl",
+        console.get_tags,
+        **{"glue_connection": "nldevun_a17a_ro"}
+    )
     mock.return_value = f.data
     return mock
 

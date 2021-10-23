@@ -1,3 +1,4 @@
+"""Wrapper to manage test data"""
 import logging
 import os
 import pickle
@@ -63,17 +64,27 @@ class FakeDataLoader:
             try:
                 self.create_cache()
             except Exception as exc:
-                raise TestException("Cache not found and couldnt be created. Create fixtures locally first") from exc
+                raise TestException(
+                    "Cache not found and couldnt be created. Create fixtures locally first"
+                ) from exc
         results = self.load_cache()
         return results
 
 
 def test_dataloader_data():
-    f = FakeDataLoader("./fixtures/cassette.pkl", console.get_tags, **{"glue_connection": "nldevun_a17a_ro"})
+    f = FakeDataLoader(
+        "./fixtures/cassette.pkl",
+        console.get_tags,
+        **{"glue_connection": "nldevun_a17a_ro"}
+    )
     assert f.data.iloc[0, 0] == "ciqSQaQhmoiKB7ccPjXXrU"
 
 
 def test_dataloader_create_cache():
-    f = FakeDataLoader("./fixtures/cassette.pkl", console.get_tags, **{"glue_connection": "nldevun_a17a_ro"})
+    f = FakeDataLoader(
+        "./fixtures/cassette.pkl",
+        console.get_tags,
+        **{"glue_connection": "nldevun_a17a_ro"}
+    )
     f.clear()
     assert f.create_cache() is True
