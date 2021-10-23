@@ -1,7 +1,9 @@
-from python_ci_template import console
+import logging
 import os
 import pickle
-import logging
+from typing import Any
+
+from python_ci_template import console
 
 log = logging.getLogger()
 log.setLevel("DEBUG")
@@ -20,24 +22,24 @@ class FakeDataLoader:
         **args: the arguments provided to the fetch_data_method
     """
 
-    def __init__(self, cache_filename, fetch_data_method, **args) -> None:
+    def __init__(self, cache_filename: str, fetch_data_method: Any, **args) -> None:
         self.cache_filename = cache_filename
         self.fetch_data_method = fetch_data_method
         self.fetch_data_args = args
 
-    def create_cache(self):
+    def create_cache(self) -> bool:
         log.debug("Create Cache")
         if os.path.isfile(self.cache_filename):
             self.clear()
 
         result = self.fetch_data_method(**self.fetch_data_args)
 
-        with open(self.cache_filename, 'wb') as handle:
+        with open(self.cache_filename, "wb") as handle:
             pickle.dump(result, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
         return True
 
-    def clear(self):
+    def clear(self) -> None:
         log.debug("Clearing Cache")
         if os.path.isfile(self.cache_filename):
             os.remove(self.cache_filename)
@@ -50,31 +52,28 @@ class FakeDataLoader:
 
     def load_cache(self):
         log.debug("Loading Cache")
-        with open(self.cache_filename, 'rb') as handle:
+        with open(self.cache_filename, "rb") as handle:
             results = pickle.load(handle)
         return results
 
     @property
-    def data(self):
+    def data(self) -> Any:
         log.debug("Fetching data")
         if not self.cache_exists:
             try:
                 self.create_cache()
-            except Exception:
-                raise TestException(
-                    "Cache not found and couldnt be created. Create fixtures locally first")
+            except Exception as exc:
+                raise TestException("Cache not found and couldnt be created. Create fixtures locally first") from exc
         results = self.load_cache()
         return results
 
 
 def test_dataloader_data():
-    f = FakeDataLoader("./fixtures/cassette.pkl", console.get_tags,
-                       **{"glue_connection": "nldevun_a17a_ro"})
-    assert f.data.iloc[0, 0] == 'ciqSQaQhmoiKB7ccPjXXrU'
+    f = FakeDataLoader("./fixtures/cassette.pkl", console.get_tags, **{"glue_connection": "nldevun_a17a_ro"})
+    assert f.data.iloc[0, 0] == "ciqSQaQhmoiKB7ccPjXXrU"
 
 
 def test_dataloader_create_cache():
-    f = FakeDataLoader("./fixtures/cassette.pkl", console.get_tags,
-                       **{"glue_connection": "nldevun_a17a_ro"})
+    f = FakeDataLoader("./fixtures/cassette.pkl", console.get_tags, **{"glue_connection": "nldevun_a17a_ro"})
     f.clear()
     assert f.create_cache() is True
