@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "python-ci-template"
-version = "0.1.0"
+version = "0.1.1"
 description = "template to create python package including generic CI tools"
 authors = ["dolfno <dnoordman@schubergphilis.com>"]
 license = "MIT"
