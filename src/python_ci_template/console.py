@@ -1,3 +1,4 @@
+"""CL tool for fetching tags"""
 from dataclasses import dataclass
 from typing import List
 
@@ -12,6 +13,13 @@ from . import __version__
 
 @dataclass
 class Tag:
+    """Data definition for a tag
+
+    Attributes:
+        name: the tag name
+        uuid: unique id of tag
+    """
+
     name: str
     uuid: str
 
@@ -19,11 +27,20 @@ class Tag:
         return f"Tag {self.name} with uuid {self.uuid}"
 
 
-tag_schema = desert.schema(Tag)
-
-
 def get_tags(glue_connection: str) -> List[Tag]:
+    """Returns a list of tags
+
+    Fetching tags from mysql and returning them in Tag schema
+
+    Args:
+        glue_connection: the name of the glue connection mysql
+
+    Returns:
+        List of tags
+    """
     tags = []
+    tag_schema = desert.schema(Tag)
+
     con = wr.mysql.connect(glue_connection)
     con.select_db("cb_data")
     with con.cursor(DictCursor) as cursor:
@@ -53,7 +70,12 @@ def get_tags(glue_connection: str) -> List[Tag]:
 )
 @click.version_option(version=__version__)
 def main(glue_connection: str, aws_region: str) -> None:
-    """The hypermodern Python project."""
+    """The CI interface
+
+    Args:
+        glue_connection: name of the glue connection for mysql
+        aws_region: default aws region for boto setup
+    """
     boto3.setup_default_session(region_name=aws_region)
 
     click.echo(click.style("Hello there", bg="blue", fg="white"))

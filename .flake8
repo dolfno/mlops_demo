@@ -1,9 +1,12 @@
 [flake8]
-select = ANN,B,B9,BLK,C,E,F,I,S,W
-ignore = E203,E501,W503,ANN101
+select = ANN,B,B9,BLK,C,D,E,F,I,S,W
+ignore = ANN101,D105,D415,E203,E501,W503
 max-line-length = 120
 max-complexity = 10
 application-import-names = python_ci_template
 import-order-style = google
 docstring-convention = google
 per-file-ignores = *tests/*:S101
+
+[darglint]
+strictness = short
